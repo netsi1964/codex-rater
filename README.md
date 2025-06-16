@@ -1,5 +1,7 @@
 # Codex Rater
 
+[Demo](https://codex-rater.deno.dev/)
+
 A small demo app for rating a Codex talk using playful icons. The project is built with Deno Deploy on the backend and a lightweight frontend in vanilla JavaScript and Tailwind CSS with container queries.
 
 Users vote once per device by clicking one of five icons (1–5). Votes are stored in Deno KV and results are rendered live in an SVG chart.
