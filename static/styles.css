@@ -1,0 +1,11 @@
+@layer utilities {
+  .bar {
+    fill: theme('colors.blue.500');
+  }
+}
+
+@container (max-width: 400px) {
+  #icons {
+    flex-direction: column;
+  }
+}
