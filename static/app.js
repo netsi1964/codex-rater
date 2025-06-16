@@ -32,6 +32,28 @@ function createConfetti() {
   }
 }
 
+function setupTooltip(ratings) {
+  const tooltip = document.getElementById('tooltip');
+  function showTooltip(e, rating) {
+    tooltip.innerHTML = `<div class='flex flex-col items-start'><span class='text-base font-bold'>${rating.value} point</span><span class='text-xs mt-1 text-gray-700'>${rating.text}</span></div>`;
+    tooltip.classList.add('show');
+    const x = e.clientX;
+    const y = e.clientY;
+    tooltip.style.left = x + 16 + 'px';
+    tooltip.style.top = y - 10 + 'px';
+  }
+  function hideTooltip() {
+    tooltip.classList.remove('show');
+  }
+  // Attach to result bars and icons
+  document.querySelectorAll('#results-graph > div').forEach((bar, i) => {
+    bar.addEventListener('mousemove', (e) => showTooltip(e, ratings[i]));
+    bar.addEventListener('mouseleave', hideTooltip);
+    bar.querySelector('img').addEventListener('mousemove', (e) => showTooltip(e, ratings[i]));
+    bar.querySelector('img').addEventListener('mouseleave', hideTooltip);
+  });
+}
+
 function renderResultsGraph(results, ratings) {
   const graph = document.getElementById('results-graph');
   graph.innerHTML = '';
@@ -40,7 +62,7 @@ function renderResultsGraph(results, ratings) {
     const count = results[rating.value] || 0;
     const percent = Math.round((count / max) * 100);
     const bar = document.createElement('div');
-    bar.className = 'flex items-center mb-4';
+    bar.className = 'flex items-center mb-4 group cursor-pointer';
     bar.innerHTML = `
       <img src="icons/${rating.icon}" alt="${rating.value}" class="w-10 h-10 mr-3">
       <div class="flex-1 bg-white/20 rounded-full h-8 relative overflow-hidden">
@@ -50,6 +72,7 @@ function renderResultsGraph(results, ratings) {
     `;
     graph.appendChild(bar);
   });
+  setupTooltip(ratings);
 }
 
 async function fetchResultsAndShowGraph(ratings) {
