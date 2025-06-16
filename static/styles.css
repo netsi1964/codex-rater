@@ -8,4 +8,11 @@
   #icons {
     flex-direction: column;
   }
+  #icons img {
+    width: 60px;
+  }
+}
+
+#icons img {
+  width: 80px;
 }
