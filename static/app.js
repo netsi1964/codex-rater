@@ -1,5 +1,11 @@
 const votedKey = 'voted';
 
+// Hide voting UI if already voted - do this immediately
+if (localStorage.getItem(votedKey)) {
+  document.getElementById('icons')?.classList.add('hidden');
+  document.getElementById('qr-section')?.classList.add('hidden');
+}
+
 async function sendVote(value) {
   await fetch('/api/vote', {
     method: 'POST',
@@ -51,18 +57,16 @@ async function loadResults() {
 function handleVoteClick(e) {
   const value = Number(e.currentTarget.dataset.vote);
   if (localStorage.getItem(votedKey)) return;
+  
+  localStorage.setItem(votedKey, '1');
+  document.getElementById('icons')?.classList.add('hidden');
+  document.getElementById('qr-section')?.classList.add('hidden');
+  
   sendVote(value).then(() => {
     loadResults();
-    document.getElementById('icons')?.classList.add('hidden');
   });
-  localStorage.setItem(votedKey, '1');
 }
 
 document.querySelectorAll('.vote').forEach(btn => btn.addEventListener('click', handleVoteClick));
-
-// Check if user has voted and hide buttons if they have
-if (localStorage.getItem(votedKey)) {
-  document.getElementById('icons')?.classList.add('hidden');
-}
 
 loadResults();
