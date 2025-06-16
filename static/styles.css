@@ -1,22 +1,5 @@
-@layer utilities {
-  .bar {
-    fill: theme('colors.blue.500');
-  }
-}
-
 @container (max-width: 400px) {
-  #icons {
+  #rating-container {
     flex-direction: column;
   }
-  #icons img {
-    width: 80px;
-  }
-}
-
-#icons img {
-  width: 120px;
-}
-
-#icons span {
-  margin-top: 4px;
 }
