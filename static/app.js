@@ -35,7 +35,10 @@ function createConfetti() {
 function setupTooltip(ratings) {
   const tooltip = document.getElementById('tooltip');
   function showTooltip(e, rating) {
-    tooltip.innerHTML = `<div class='flex flex-col items-start'><span class='text-base font-bold'>${rating.value} point</span><span class='text-xs mt-1 text-gray-700'>${rating.text}</span></div>`;
+    tooltip.innerHTML = `<div class='flex flex-col items-start'>
+      <span style="font-size:2rem; font-weight:bold; line-height:1;">${rating.value} point</span>
+      <span style="font-size:1.1rem; margin-top:0.2rem; color:#555; line-height:1.2;">${rating.text}</span>
+    </div>`;
     tooltip.classList.add('show');
     const x = e.clientX;
     const y = e.clientY;

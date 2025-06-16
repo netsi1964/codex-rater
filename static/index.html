@@ -30,14 +30,29 @@
             to { opacity: 1; }
         }
         .custom-tooltip {
-            @apply pointer-events-none fixed z-50 px-4 py-2 rounded-xl shadow-xl bg-white/90 text-gray-900 text-sm font-semibold opacity-0 scale-95 transition-all duration-200 ease-out backdrop-blur-md border border-white/30;
-            min-width: 180px;
+            pointer-events: none;
+            position: fixed;
+            z-index: 50;
+            padding: 0.25rem 1rem;
+            border-radius: 0.75rem;
+            background: rgba(255,255,255,0.9);
+            color: #22223b;
+            font-size: 2rem;
+            font-weight: 600;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.2s, transform 0.2s;
+            line-height: 1.1;
+            min-width: 0;
             max-width: 260px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.3);
+            white-space: pre-line;
         }
         .custom-tooltip.show {
             opacity: 1;
-            scale: 1;
+            transform: scale(1);
         }
     </style>
 </head>
