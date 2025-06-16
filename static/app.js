@@ -54,16 +54,37 @@ async function loadResults() {
   renderChart(data.percentages);
 }
 
+function showThankYou() {
+  const thankYou = document.getElementById('thank-you');
+  thankYou.classList.remove('hidden');
+  setTimeout(() => {
+    thankYou.classList.add('hidden');
+  }, 2000);
+}
+
 function handleVoteClick(e) {
   const value = Number(e.currentTarget.dataset.vote);
   if (localStorage.getItem(votedKey)) return;
   
+  // Disable all vote buttons immediately
+  document.querySelectorAll('.vote').forEach(btn => {
+    btn.disabled = true;
+    btn.classList.add('opacity-50');
+  });
+  
+  // Highlight selected button
+  e.currentTarget.classList.remove('opacity-50');
+  e.currentTarget.classList.add('bg-gray-100');
+  
   localStorage.setItem(votedKey, '1');
-  document.getElementById('icons')?.classList.add('hidden');
-  document.getElementById('qr-section')?.classList.add('hidden');
   
   sendVote(value).then(() => {
     loadResults();
+    showThankYou();
+    setTimeout(() => {
+      document.getElementById('icons')?.classList.add('hidden');
+      document.getElementById('qr-section')?.classList.add('hidden');
+    }, 2000);
   });
 }
 
