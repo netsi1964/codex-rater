@@ -46,18 +46,23 @@ function renderChart(percentages) {
 async function loadResults() {
   const data = await fetchResults();
   renderChart(data.percentages);
-  if (localStorage.getItem(votedKey)) {
-    document.getElementById('icons')?.classList.add('hidden');
-  }
 }
 
 function handleVoteClick(e) {
   const value = Number(e.currentTarget.dataset.vote);
   if (localStorage.getItem(votedKey)) return;
-  sendVote(value).then(loadResults);
+  sendVote(value).then(() => {
+    loadResults();
+    document.getElementById('icons')?.classList.add('hidden');
+  });
   localStorage.setItem(votedKey, '1');
 }
 
 document.querySelectorAll('.vote').forEach(btn => btn.addEventListener('click', handleVoteClick));
+
+// Check if user has voted and hide buttons if they have
+if (localStorage.getItem(votedKey)) {
+  document.getElementById('icons')?.classList.add('hidden');
+}
 
 loadResults();
