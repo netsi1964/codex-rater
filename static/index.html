@@ -7,14 +7,29 @@
   <script src="https://cdn.tailwindcss.com?plugins=@tailwindcss/container-queries"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4">
+<body class="min-h-screen flex flex-col items-center justify-center p-4 font-sans">
   <h1 class="text-2xl mb-4">Rate the Codex Talk!</h1>
-  <div id="icons" class="flex gap-2 mb-6">
-    <button data-vote="1" class="vote"><img src="icons/rate-1.png" alt="1" /></button>
-    <button data-vote="2" class="vote"><img src="icons/rate-2.png" alt="2" /></button>
-    <button data-vote="3" class="vote"><img src="icons/rate-3.png" alt="3" /></button>
-    <button data-vote="4" class="vote"><img src="icons/rate-4.png" alt="4" /></button>
-    <button data-vote="5" class="vote"><img src="icons/rate-5.png" alt="5" /></button>
+  <div id="icons" class="flex gap-4 mb-6">
+    <button data-vote="1" class="vote flex flex-col items-center">
+      <img src="icons/rate-1.png" alt="1" class="icon" />
+      <span>1</span>
+    </button>
+    <button data-vote="2" class="vote flex flex-col items-center">
+      <img src="icons/rate-2.png" alt="2" class="icon" />
+      <span>2</span>
+    </button>
+    <button data-vote="3" class="vote flex flex-col items-center">
+      <img src="icons/rate-3.png" alt="3" class="icon" />
+      <span>3</span>
+    </button>
+    <button data-vote="4" class="vote flex flex-col items-center">
+      <img src="icons/rate-4.png" alt="4" class="icon" />
+      <span>4</span>
+    </button>
+    <button data-vote="5" class="vote flex flex-col items-center">
+      <img src="icons/rate-5.png" alt="5" class="icon" />
+      <span>5</span>
+    </button>
   </div>
   <div class="w-full max-w-md">
     <svg id="chart" viewBox="0 0 100 60" class="w-full"></svg>
