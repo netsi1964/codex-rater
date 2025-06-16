@@ -33,9 +33,11 @@ function renderChart(percentages) {
 
     const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
     text.setAttribute('x', x + barWidth / 2);
-    text.setAttribute('y', y - 2);
+    text.setAttribute('y', 58);
     text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('font-size', '4');
+    text.setAttribute('font-size', '8');
+    text.setAttribute('fill', '#000000');
+    text.setAttribute('font-weight', 'bold');
     text.textContent = percentages[key] + '%';
     svg.appendChild(text);
   });

@@ -9,31 +9,59 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 font-sans">
   <h1 class="text-2xl mb-4">Rate the Codex Talk!</h1>
-  <div id="icons" class="flex gap-4 mb-6">
+  <div class="w-full max-w-md mb-6">
+    <svg id="chart" viewBox="0 0 100 60" class="w-full"></svg>
+  </div>
+  <div id="icons" class="flex gap-4">
     <button data-vote="1" class="vote flex flex-col items-center">
       <img src="icons/rate-1.png" alt="1" class="icon" />
-      <span>1</span>
+      <span>Oh dear, this was absolutely ap-peelingly awful!</span>
     </button>
     <button data-vote="2" class="vote flex flex-col items-center">
       <img src="icons/rate-2.png" alt="2" class="icon" />
-      <span>2</span>
+      <span>Mildly steeped, mostly spilled</span>
     </button>
     <button data-vote="3" class="vote flex flex-col items-center">
       <img src="icons/rate-3.png" alt="3" class="icon" />
-      <span>3</span>
+      <span>Sparks flew… but not in a good way.</span>
     </button>
     <button data-vote="4" class="vote flex flex-col items-center">
       <img src="icons/rate-4.png" alt="4" class="icon" />
-      <span>4</span>
+      <span>Clumsy, but charmingly pointy!</span>
     </button>
     <button data-vote="5" class="vote flex flex-col items-center">
       <img src="icons/rate-5.png" alt="5" class="icon" />
-      <span>5</span>
+      <span>Top marks! I'm flipping impressed!</span>
     </button>
   </div>
-  <div class="w-full max-w-md">
-    <svg id="chart" viewBox="0 0 100 60" class="w-full"></svg>
-  </div>
   <script src="app.js"></script>
+  <style>
+    body {
+      font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif;
+font-weight: normal;
+font-size: 16pt;
+    }
+    button {
+      width: 18vw;
+      background: transparent;
+      outline: none;
+      border: none;
+      font-size: 16pt;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+
+      span {
+        display: block;
+      }
+    }
+    svg > text {
+      font-size: 3pt;
+      font-weight: bold;
+      fill: #000;
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+  </style>
 </body>
 </html>
