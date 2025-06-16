@@ -1,11 +1,5 @@
 const votedKey = 'voted';
 
-// Hide voting UI if already voted - do this immediately
-if (localStorage.getItem(votedKey)) {
-  document.getElementById('icons')?.classList.add('hidden');
-  document.getElementById('qr-section')?.classList.add('hidden');
-}
-
 async function sendVote(value) {
   await fetch('/api/vote', {
     method: 'POST',
@@ -14,80 +8,70 @@ async function sendVote(value) {
   });
 }
 
-async function fetchResults() {
-  const res = await fetch('/api/results');
-  return res.json();
+function createConfetti() {
+  const colors = ['#f00', '#0f0', '#00f', '#ff0', '#f0f', '#0ff'];
+  for (let i = 0; i < 50; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.left = Math.random() * 100 + 'vw';
+    confetti.style.top = '-10px';
+    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+    const size = Math.random() * 10 + 5;
+    confetti.style.width = size + 'px';
+    confetti.style.height = size + 'px';
+    document.body.appendChild(confetti);
+    const animation = confetti.animate([
+      { top: '-10px', opacity: 0 },
+      { top: Math.random() * 100 + 'vh', opacity: 1 }
+    ], {
+      duration: Math.random() * 3000 + 2000,
+      easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+    });
+    animation.onfinish = () => confetti.remove();
+  }
 }
 
-function renderChart(percentages) {
-  const svg = document.getElementById('chart');
-  svg.innerHTML = '';
-  const barWidth = 15;
-  const colors = ['#dc2626', '#f97316', '#eab308', '#84cc16', '#22c55e'];
-  Object.keys(percentages).forEach((key, idx) => {
-    const height = percentages[key];
-    const x = idx * (barWidth + 5);
-    const y = 60 - height * 0.6;
-    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    rect.setAttribute('x', x);
-    rect.setAttribute('y', y);
-    rect.setAttribute('width', barWidth);
-    rect.setAttribute('height', height * 0.6);
-    rect.setAttribute('fill', colors[idx]);
-    rect.setAttribute('class', 'bar');
-    svg.appendChild(rect);
+document.addEventListener('DOMContentLoaded', () => {
+  const ratings = [
+    { value: 1, icon: 'rate-1.png', text: "Oh dear, this was absolutely ap-peelingly awful!" },
+    { value: 2, icon: 'rate-2.png', text: "Mildly steeped, mostly spilled!" },
+    { value: 3, icon: 'rate-3.png', text: "Sparks flew… but not in a good way." },
+    { value: 4, icon: 'rate-4.png', text: "Clumsy, but charmingly pointy!" },
+    { value: 5, icon: 'rate-5.png', text: "Top marks! I'm flipping impressed!" }
+  ];
 
-    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', x + barWidth / 2);
-    text.setAttribute('y', 58);
-    text.setAttribute('text-anchor', 'middle');
-    text.setAttribute('font-size', '8');
-    text.setAttribute('fill', '#000000');
-    text.setAttribute('font-weight', 'bold');
-    text.textContent = percentages[key] + '%';
-    svg.appendChild(text);
+  const container = document.getElementById('rating-container');
+  const feedbackDiv = document.getElementById('rating-feedback');
+  const feedbackText = document.getElementById('feedback-text');
+  const thankYouDiv = document.getElementById('thank-you');
+
+  if (localStorage.getItem(votedKey)) {
+    container.classList.add('hidden');
+    feedbackDiv.classList.add('hidden');
+    thankYouDiv.classList.remove('hidden');
+    return;
+  }
+
+  ratings.forEach(rating => {
+    const btn = document.createElement('button');
+    btn.className = 'rating-btn bg-white/20 hover:bg-white/30 text-white font-bold py-3 px-4 rounded-full flex flex-col items-center w-32';
+    btn.innerHTML = `<img src="icons/${rating.icon}" alt="Rating ${rating.value}" class="w-12 h-12 mb-1"><span class="text-xs text-center">${rating.text}</span>`;
+    btn.addEventListener('click', () => {
+      if (localStorage.getItem(votedKey)) return;
+      document.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      feedbackText.textContent = rating.text;
+      feedbackDiv.classList.remove('hidden');
+      localStorage.setItem(votedKey, '1');
+      sendVote(rating.value).then(() => {
+        setTimeout(() => {
+          feedbackDiv.classList.add('hidden');
+          thankYouDiv.classList.remove('hidden');
+          createConfetti();
+        }, 1500);
+      });
+    });
+    container.appendChild(btn);
   });
-}
-
-async function loadResults() {
-  const data = await fetchResults();
-  renderChart(data.percentages);
-}
-
-function showThankYou() {
-  const thankYou = document.getElementById('thank-you');
-  thankYou.classList.remove('hidden');
-  setTimeout(() => {
-    thankYou.classList.add('hidden');
-  }, 2000);
-}
-
-function handleVoteClick(e) {
-  const value = Number(e.currentTarget.dataset.vote);
-  if (localStorage.getItem(votedKey)) return;
-  
-  // Disable all vote buttons immediately
-  document.querySelectorAll('.vote').forEach(btn => {
-    btn.disabled = true;
-    btn.classList.add('opacity-50');
-  });
-  
-  // Highlight selected button
-  e.currentTarget.classList.remove('opacity-50');
-  e.currentTarget.classList.add('bg-gray-100');
-  
-  localStorage.setItem(votedKey, '1');
-  
-  sendVote(value).then(() => {
-    loadResults();
-    showThankYou();
-    setTimeout(() => {
-      document.getElementById('icons')?.classList.add('hidden');
-      document.getElementById('qr-section')?.classList.add('hidden');
-    }, 2000);
-  });
-}
-
-document.querySelectorAll('.vote').forEach(btn => btn.addEventListener('click', handleVoteClick));
-
-loadResults();
+});
