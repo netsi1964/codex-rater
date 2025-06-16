@@ -32,6 +32,42 @@ function createConfetti() {
   }
 }
 
+function renderResultsGraph(results, ratings) {
+  const graph = document.getElementById('results-graph');
+  graph.innerHTML = '';
+  const max = Math.max(...ratings.map(r => results[r.value] || 0), 1);
+  ratings.forEach(rating => {
+    const count = results[rating.value] || 0;
+    const percent = Math.round((count / max) * 100);
+    const bar = document.createElement('div');
+    bar.className = 'flex items-center mb-4';
+    bar.innerHTML = `
+      <img src="icons/${rating.icon}" alt="${rating.value}" class="w-10 h-10 mr-3">
+      <div class="flex-1 bg-white/20 rounded-full h-8 relative overflow-hidden">
+        <div class="bg-gradient-to-r from-indigo-400 to-purple-400 h-8 rounded-full" style="width: ${percent}%; min-width: 2rem;"></div>
+        <span class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-bold">${count}</span>
+      </div>
+    `;
+    graph.appendChild(bar);
+  });
+}
+
+async function fetchResultsAndShowGraph(ratings) {
+  const resultsDiv = document.getElementById('results');
+  const thankYouDiv = document.getElementById('thank-you');
+  try {
+    const res = await fetch('/api/results');
+    const data = await res.json();
+    renderResultsGraph(data.counts, ratings);
+    resultsDiv.classList.remove('hidden');
+    thankYouDiv.classList.remove('hidden');
+  } catch (e) {
+    // fallback: show error
+    document.getElementById('results-graph').innerHTML = '<div class="text-white">Could not load results.</div>';
+    resultsDiv.classList.remove('hidden');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const ratings = [
     { value: 1, icon: 'rate-1.png', text: "Oh dear, this was absolutely ap-peelingly awful!" },
@@ -45,11 +81,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const feedbackDiv = document.getElementById('rating-feedback');
   const feedbackText = document.getElementById('feedback-text');
   const thankYouDiv = document.getElementById('thank-you');
+  const qrSection = document.getElementById('qr-section');
+  const rateBelowText = document.getElementById('rate-below-text');
 
   if (localStorage.getItem(votedKey)) {
     container.classList.add('hidden');
     feedbackDiv.classList.add('hidden');
     thankYouDiv.classList.remove('hidden');
+    if (qrSection) qrSection.classList.add('hidden');
+    if (rateBelowText) rateBelowText.classList.add('hidden');
+    fetchResultsAndShowGraph(ratings);
     return;
   }
 
@@ -68,7 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
           feedbackDiv.classList.add('hidden');
           thankYouDiv.classList.remove('hidden');
+          if (qrSection) qrSection.classList.add('hidden');
+          if (rateBelowText) rateBelowText.classList.add('hidden');
           createConfetti();
+          fetchResultsAndShowGraph(ratings);
         }, 1500);
       });
     });

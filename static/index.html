@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Codex Rater</title>
-    <script src="https://cdn.tailwindcss.com?plugins=@tailwindcss/container-queries"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=container-queries"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
     <style>
@@ -42,12 +42,12 @@
             <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">Codex Rater</h1>
             <p class="text-white/80 mb-8">Rate the Codex Talk!</p>
             <div class="flex flex-col md:flex-row items-center justify-center gap-6 mb-10">
-                <div class="bg-white p-3 rounded-lg shadow-lg">
+                <div class="bg-white p-3 rounded-lg shadow-lg" id="qr-section">
                     <img src="icons/qr.png" alt="QR Code" class="w-32 h-32">
                     <p class="text-sm text-gray-700 mt-2">Scan to rate the talk!</p>
                 </div>
                 <div class="text-white text-center">
-                    <p class="mb-4">Or rate directly below:</p>
+                    <p class="mb-4" id="rate-below-text">Or rate directly below:</p>
                     <div class="flex flex-wrap justify-center gap-3" id="rating-container"></div>
                 </div>
             </div>
@@ -60,6 +60,10 @@
                 </div>
                 <h2 class="text-2xl font-bold text-white mb-2">Thank you for voting!</h2>
                 <p class="text-white/80">Your vote has been recorded.</p>
+            </div>
+            <div id="results" class="hidden mt-8 flex flex-col items-center">
+                <h3 class="text-xl font-bold text-white mb-4">Live Results</h3>
+                <div id="results-graph" class="w-full max-w-md"></div>
             </div>
         </div>
     </div>
